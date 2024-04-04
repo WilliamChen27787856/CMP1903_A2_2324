@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CMP1903_A1_2324 {
+namespace CMP1903_A2_2324 {
 
   /// <summary>
   /// This class is designed to be simulate a normal 6-sided die.
