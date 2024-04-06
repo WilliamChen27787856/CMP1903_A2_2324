@@ -6,7 +6,14 @@ namespace CMP1903_A2_2324 {
 
     public static void Main(string[] args) {
       GameEnum game = Choice(new GameEnum[] { GameEnum.SEVENS_OUT, GameEnum.THREE_OR_MORE });
-      Console.WriteLine(game);
+      if (game == GameEnum.SEVENS_OUT) {
+        // TODO: Create Sevens Out game.
+      } else if (game == GameEnum.THREE_OR_MORE) {
+        // TODO: Create Three Or More game.
+      } else {
+        Console.WriteLine("Could not instantiate game."); // This should not happen.
+        return;
+      }
     }
 
     public static T Choice<T>(T[] choices) {
