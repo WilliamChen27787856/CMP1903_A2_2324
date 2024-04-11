@@ -2,18 +2,44 @@ using System;
 
 namespace CMP1903_A2_2324 {
 
-  public class Game {
+  public abstract class Game {
 
     public static void Main(string[] args) {
-      GameEnum game = Choice(new GameEnum[] { GameEnum.SEVENS_OUT, GameEnum.THREE_OR_MORE });
-      if (game == GameEnum.SEVENS_OUT) {
-        // TODO: Create Sevens Out game.
-      } else if (game == GameEnum.THREE_OR_MORE) {
-        // TODO: Create Three Or More game.
-      } else {
-        Console.WriteLine("Could not instantiate game."); // This should not happen.
-        return;
+      Game game = PickGame();
+      game.Play();
+    }
+
+    /*
+    * All code below this point is the definition of the Game class to base the SevensOut and
+    * ThreeOrMore classes on, this will create a nice interface that allows the main program logic
+    * to be written without needing to do anything specific for each game to be played.
+    */
+
+    public bool AgainstComputer { get; private set; }
+    public bool PlayerOneMove { get; private set; } = true;
+    public int Score {get; private set; } = 0;
+
+    public Game(int dieCount, int sidesPerDie, bool againstComputer) {
+      this.AgainstComputer = againstComputer;
+    }
+
+    public abstract void Play();
+    public abstract void CalculateComputerTurn();
+
+    /*
+    * All code below this point is utilities for console applications, these are not required for
+    * GUI applications.
+    */
+    public static Game PickGame() {
+      string gameChoice = Choice(new string[] { "Sevens Out", "Three or More" });
+      Game game;
+      switch (gameChoice) {
+        case "Sevens Out":
+          return new SevensOut(3, 6, true);
+        default:
+          return new ThreeOrMore(3, 6, true);
       }
+      return null; // This cannot be happen.
     }
 
     public static T Choice<T>(T[] choices) {
@@ -43,10 +69,6 @@ namespace CMP1903_A2_2324 {
       }
     }
 
-  }
-
-  public enum GameEnum {
-    SEVENS_OUT, THREE_OR_MORE
   }
 
 }
