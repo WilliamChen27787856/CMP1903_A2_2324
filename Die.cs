@@ -5,7 +5,7 @@ namespace CMP1903_A2_2324 {
   /// <summary>
   /// This class is designed to be simulate a normal 6-sided die.
   /// </summary>
-  internal class Die {
+  public class Die {
 
     /// <value>
     /// A static instance of the Random object to create random values for the class.

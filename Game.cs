@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace CMP1903_A2_2324 {
 
@@ -6,7 +8,7 @@ namespace CMP1903_A2_2324 {
 
     public static void Main(string[] args) {
       Game game = PickGame();
-      game.Play();
+      game.NextMove();
     }
 
     /*
@@ -17,14 +19,43 @@ namespace CMP1903_A2_2324 {
 
     public bool AgainstComputer { get; private set; }
     public bool PlayerOneMove { get; private set; } = true;
-    public int Score {get; private set; } = 0;
+    public int PlayerOneScore { get; protected set; } = 0;
+    public int PlayerTwoScore { get; protected set; } = 0;
+    protected Die[] _dice;
 
-    public Game(int dieCount, int sidesPerDie, bool againstComputer) {
+    public Game(int diceCount, int sidesPerDie, bool againstComputer) {
       this.AgainstComputer = againstComputer;
+      this._dice = new Die[diceCount];
+      for (int i = 0; i < diceCount; i++) {
+        this._dice[i] = new Die(sidesPerDie);
+      }
     }
 
-    public abstract void Play();
-    public abstract void CalculateComputerTurn();
+    public abstract bool NextMove();
+
+    protected sealed int[] RollDie() {
+      return _dice.Select(die => die.Roll()).ToArray();
+    }
+
+    protected sealed void SwitchPlayer() {
+      this.PlayerOneMove = !this.PlayerOneMove;
+    }
+
+    protected sealed void AddScoreCurrentPlayer(int amount) {
+      if (this.PlayerOneMove) {
+        this.PlayerOneScore += amount;
+        return;
+      }
+      this.PlayerTwoScore += amount;
+    }
+
+    protected sealed int GetScoreCurrentPlayer() {
+      return this.PlayerOneMove ? PlayerOneScore : PlayerTwoScore;
+    }
+
+    protected sealed string GetPlayerName() {
+      return this.PlayerOneMove ? "Player One" : (this.AgainstComputer ? "Computer" : "Player Two");
+    }
 
     /*
     * All code below this point is utilities for console applications, these are not required for
@@ -35,11 +66,10 @@ namespace CMP1903_A2_2324 {
       Game game;
       switch (gameChoice) {
         case "Sevens Out":
-          return new SevensOut(3, 6, true);
+          return new SevensOut(true);
         default:
-          return new ThreeOrMore(3, 6, true);
+          return new SevensOut(true);
       }
-      return null; // This cannot be happen.
     }
 
     public static T Choice<T>(T[] choices) {
