@@ -33,15 +33,18 @@ namespace CMP1903_A2_2324 {
 
     public abstract bool NextMove();
 
-    protected sealed int[] RollDie() {
-      return _dice.Select(die => die.Roll()).ToArray();
+    protected int[] RollDice() {
+      return _dice.Select<Die, int>(die => die.Roll()).ToArray();
     }
 
-    protected sealed void SwitchPlayer() {
+    protected void SwitchPlayer() {
       this.PlayerOneMove = !this.PlayerOneMove;
+      foreach (Die die in this._dice) {
+        die.Locked = false; // As a precaution, ensure no die is locked for next turn.
+      }
     }
 
-    protected sealed void AddScoreCurrentPlayer(int amount) {
+    protected void AddScoreCurrentPlayer(int amount) {
       if (this.PlayerOneMove) {
         this.PlayerOneScore += amount;
         return;
@@ -49,11 +52,11 @@ namespace CMP1903_A2_2324 {
       this.PlayerTwoScore += amount;
     }
 
-    protected sealed int GetScoreCurrentPlayer() {
+    protected int GetScoreCurrentPlayer() {
       return this.PlayerOneMove ? PlayerOneScore : PlayerTwoScore;
     }
 
-    protected sealed string GetPlayerName() {
+    protected string GetPlayerName() {
       return this.PlayerOneMove ? "Player One" : (this.AgainstComputer ? "Computer" : "Player Two");
     }
 
@@ -63,21 +66,18 @@ namespace CMP1903_A2_2324 {
     */
     public static Game PickGame() {
       string gameChoice = Choice(new string[] { "Sevens Out", "Three or More" });
-      Game game;
       switch (gameChoice) {
         case "Sevens Out":
           return new SevensOut(true);
         default:
-          return new SevensOut(true);
+          return new TheeOrMore(true);
       }
     }
 
     public static T Choice<T>(T[] choices) {
-      int i = 0;
       Console.WriteLine("========================================");
-      foreach (T item in choices) {
-        Console.WriteLine($"[{i}] {item.ToString()}");
-        i++;
+      for (int i = 0; i < choices.Length; i++) {
+        Console.WriteLine($"[{i}] {choices[i].ToString()}");
       }
       Console.WriteLine("========================================");
       return choices[IntChoice(0, choices.Length - 1)];

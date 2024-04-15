@@ -11,7 +11,7 @@ namespace CMP1903_A2_2324 {
     }
 
     public override bool NextMove() {
-      int[] rolledDice = this.RollDie();
+      int[] rolledDice = this.RollDice();
       int total = rolledDice.Sum();
 
       if (total == 7) {

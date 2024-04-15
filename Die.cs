@@ -24,6 +24,8 @@ namespace CMP1903_A2_2324 {
     /// </value>
     public int Value { get; private set; }
 
+    public bool Locked { get; set; } = false;
+
     public Die() {
       this.Value = _random.Next(1, NumberOfSides + 1);
       this.NumberOfSides = 6;
@@ -41,7 +43,8 @@ namespace CMP1903_A2_2324 {
     /// An integer of the side the die displayed once rolled.
     /// </returns>
     public int Roll() {
-      Value = _random.Next(1, NumberOfSides + 1);
+      if (!Locked)
+        Value = _random.Next(1, NumberOfSides + 1);
       return Value;
     }
 
