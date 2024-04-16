@@ -14,12 +14,17 @@ namespace CMP1903_A2_2324 {
       int total = 0;
       int[] rolledDice = this.RollDice();
 
-      while (TwoOfAKind()) {
-
+      if (TwoOfAKind()) {
+        // TODO: Ask to re-roll.
       }
 
+      // TODO: Calculate points.
+	    // - 3-of-a-kind: 3 points
+	    // - 4-of-a-kind: 6 points
+	    // - 5-of-a-kind: 12 points
+	    // - First to a total of 20 points.
 
-      this.AddScoreCurrentPlayer(total);
+      this.AddScorePlayer(total);
       this.SwitchPlayer();
       return true; // Continue playing.
     }

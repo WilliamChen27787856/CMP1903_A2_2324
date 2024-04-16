@@ -14,16 +14,23 @@ namespace CMP1903_A2_2324 {
       int[] rolledDice = this.RollDice();
       int total = rolledDice.Sum();
 
+      int dieOne = rolledDice[0];
+      int dieTwo = rolledDice[1];
+
+      Game.ScreenPrint($"{this.GetPlayerName()} rolled {dieOne} & {dieTwo}.");
+
       if (total == 7) {
+        Game.ScreenPrint($"{this.GetPlayerName()} has lost...");
         return false; // Game over...
       }
 
-      if (rolledDice[0] == rolledDice[1]) {
+      if (dieOne == dieTwo) {
         total *= 2;
       }
 
-      Console.WriteLine(this.GetPlayerName() + ": " + total);
-      this.AddScoreCurrentPlayer(total);
+      this.AddScorePlayer(total);
+      Game.ScreenPrint($"{this.GetPlayerName()}: {total} added to total ({this.GetScorePlayer()})");
+
       this.SwitchPlayer();
       return true; // Continue playing.
     }

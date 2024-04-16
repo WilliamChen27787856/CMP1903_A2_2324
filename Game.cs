@@ -6,9 +6,16 @@ namespace CMP1903_A2_2324 {
 
   public abstract class Game {
 
+    public static bool DEBUG = false;
+
     public static void Main(string[] args) {
       Game game = PickGame();
-      game.NextMove();
+      // TODO: Continual playing until game returns false.
+      game.Play();
+
+      // TODO: Collect statistics.
+      // TODO: Get player scores and print them out.
+      // TODO: Perform testing.
     }
 
     /*
@@ -33,18 +40,23 @@ namespace CMP1903_A2_2324 {
 
     public abstract bool NextMove();
 
+    public void Play() {
+      do {
+        Game.ScreenPrint("=====================");
+      } while (this.NextMove());
+      Game.ScreenPrint("=====================");
+    }
+
     protected int[] RollDice() {
       return _dice.Select<Die, int>(die => die.Roll()).ToArray();
     }
 
     protected void SwitchPlayer() {
       this.PlayerOneMove = !this.PlayerOneMove;
-      foreach (Die die in this._dice) {
-        die.Locked = false; // As a precaution, ensure no die is locked for next turn.
-      }
+      this.UnlockAllDie(); // As a precaution, ensure no die is locked for next turn.
     }
 
-    protected void AddScoreCurrentPlayer(int amount) {
+    protected void AddScorePlayer(int amount) {
       if (this.PlayerOneMove) {
         this.PlayerOneScore += amount;
         return;
@@ -52,12 +64,18 @@ namespace CMP1903_A2_2324 {
       this.PlayerTwoScore += amount;
     }
 
-    protected int GetScoreCurrentPlayer() {
+    protected int GetScorePlayer() {
       return this.PlayerOneMove ? PlayerOneScore : PlayerTwoScore;
     }
 
     protected string GetPlayerName() {
       return this.PlayerOneMove ? "Player One" : (this.AgainstComputer ? "Computer" : "Player Two");
+    }
+
+    protected void UnlockAllDie() {
+      foreach (Die die in this._dice) {
+        die.Locked = false;
+      }
     }
 
     /*
@@ -70,31 +88,53 @@ namespace CMP1903_A2_2324 {
         case "Sevens Out":
           return new SevensOut(true);
         default:
-          return new TheeOrMore(true);
+          return new ThreeOrMore(true);
       }
     }
 
-    public static T Choice<T>(T[] choices) {
-      Console.WriteLine("========================================");
-      for (int i = 0; i < choices.Length; i++) {
-        Console.WriteLine($"[{i}] {choices[i].ToString()}");
+
+    /*
+    * Method below here would be required to be re-implemented to work in a GUI.
+    * They act as a wrapper so we do not need to replace the functions throughout
+    * the rest of the program's code.
+    */
+
+    public static string ScreenPrint(string text) {
+      if (DEBUG) {
+        Console.WriteLine(text);
       }
-      Console.WriteLine("========================================");
+      return text;
+    }
+
+    public static string UserInput(string text = "Input >") {
+      ScreenPrint(text);
+      return Console.ReadLine();
+    }
+
+    /*
+    * These methods below would only be need to be rewritten if they were to
+    * display text differently to a single text box in a GUI.
+    */
+    public static T Choice<T>(T[] choices) {
+      Game.ScreenPrint("========================================");
+      for (int i = 0; i < choices.Length; i++) {
+        Game.ScreenPrint($"[{i}] {choices[i].ToString()}");
+      }
+      Game.ScreenPrint("========================================");
       return choices[IntChoice(0, choices.Length - 1)];
     }
 
     public static int IntChoice(int min, int max) {
       while (true) {
         try {
-          Console.Write("Input > ");
-          int choice = int.Parse(Console.ReadLine());
+          int choice = int.Parse(Game.UserInput());
           if (choice < min || choice > max) {
-            Console.WriteLine($"Please enter a number in the range {min} to {max} (inclusive).");
+            Game.ScreenPrint($"Please enter a number in the range {min} to {max} (inclusive).");
             continue;
           }
           return choice;
         } catch (Exception) {
-          Console.WriteLine("Please enter a number.");
+          Game.ScreenPrint("Please enter a number.");
         }
       }
     }
