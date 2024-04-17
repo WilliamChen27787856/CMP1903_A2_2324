@@ -48,5 +48,9 @@ namespace CMP1903_A2_2324 {
       return Value;
     }
 
+    public override string ToString() {
+      return this.Value.ToString();
+    }
+
   }
 }

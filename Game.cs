@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -6,12 +7,10 @@ namespace CMP1903_A2_2324 {
 
   public abstract class Game {
 
-    public static bool DEBUG = false;
-
     public static void Main(string[] args) {
       Game game = PickGame();
-      // TODO: Continual playing until game returns false.
       game.Play();
+      Game.Pause();
 
       // TODO: Collect statistics.
       // TODO: Get player scores and print them out.
@@ -51,6 +50,14 @@ namespace CMP1903_A2_2324 {
       return _dice.Select<Die, int>(die => die.Roll()).ToArray();
     }
 
+    protected void PrintRolledDice() {
+      StringBuilder sb = new StringBuilder();
+      sb.Append($"{this.GetPlayerName()} has rolled: ");
+      sb.AppendJoin<Die>(", ", this._dice);
+      sb.Append(".");
+      Game.ScreenPrint(sb.ToString());
+    }
+
     protected void SwitchPlayer() {
       this.PlayerOneMove = !this.PlayerOneMove;
       this.UnlockAllDie(); // As a precaution, ensure no die is locked for next turn.
@@ -59,9 +66,10 @@ namespace CMP1903_A2_2324 {
     protected void AddScorePlayer(int amount) {
       if (this.PlayerOneMove) {
         this.PlayerOneScore += amount;
-        return;
+      } else {
+        this.PlayerTwoScore += amount;
       }
-      this.PlayerTwoScore += amount;
+      Game.ScreenPrint($"{this.GetPlayerName()}: {amount} added to total ({this.GetScorePlayer()})");
     }
 
     protected int GetScorePlayer() {
@@ -83,6 +91,7 @@ namespace CMP1903_A2_2324 {
     * GUI applications.
     */
     public static Game PickGame() {
+      Game.ScreenPrint("What game would you like to play?");
       string gameChoice = Choice(new string[] { "Sevens Out", "Three or More" });
       switch (gameChoice) {
         case "Sevens Out":
@@ -99,16 +108,19 @@ namespace CMP1903_A2_2324 {
     * the rest of the program's code.
     */
 
-    public static string ScreenPrint(string text) {
-      if (DEBUG) {
-        Console.WriteLine(text);
-      }
+    public static string ScreenPrint(string text, bool newLine = true) {
+      Console.Write(text + (newLine ? "\n" : ""));
       return text;
     }
 
-    public static string UserInput(string text = "Input >") {
-      ScreenPrint(text);
+    public static string UserInput(string text = "Input > ") {
+      ScreenPrint(text, false);
       return Console.ReadLine();
+    }
+
+    public static bool Pause() {
+      Console.ReadKey();
+      return true;
     }
 
     /*
@@ -116,11 +128,11 @@ namespace CMP1903_A2_2324 {
     * display text differently to a single text box in a GUI.
     */
     public static T Choice<T>(T[] choices) {
-      Game.ScreenPrint("========================================");
+      Game.ScreenPrint("=====================");
       for (int i = 0; i < choices.Length; i++) {
         Game.ScreenPrint($"[{i}] {choices[i].ToString()}");
       }
-      Game.ScreenPrint("========================================");
+      Game.ScreenPrint("=====================");
       return choices[IntChoice(0, choices.Length - 1)];
     }
 

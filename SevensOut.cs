@@ -17,7 +17,7 @@ namespace CMP1903_A2_2324 {
       int dieOne = rolledDice[0];
       int dieTwo = rolledDice[1];
 
-      Game.ScreenPrint($"{this.GetPlayerName()} rolled {dieOne} & {dieTwo}.");
+      this.PrintRolledDice();
 
       if (total == 7) {
         Game.ScreenPrint($"{this.GetPlayerName()} has lost...");
@@ -29,9 +29,8 @@ namespace CMP1903_A2_2324 {
       }
 
       this.AddScorePlayer(total);
-      Game.ScreenPrint($"{this.GetPlayerName()}: {total} added to total ({this.GetScorePlayer()})");
-
       this.SwitchPlayer();
+      Game.Pause();
       return true; // Continue playing.
     }
 

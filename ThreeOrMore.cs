@@ -13,36 +13,84 @@ namespace CMP1903_A2_2324 {
     public override bool NextMove() {
       int total = 0;
       int[] rolledDice = this.RollDice();
+      this.PrintRolledDice();
 
-      if (TwoOfAKind()) {
-        // TODO: Ask to re-roll.
+      int twoOfAKind = TwoOfAKind();
+
+      if (twoOfAKind != -1) {
+        Game.ScreenPrint("You got a double. Would you like to re-roll the others?");
+        string reRoll = Game.Choice(new string[] { "All", "Remaining", "No" });
+
+        if (reRoll == "Remaining") {
+          this.LockTwoDice(twoOfAKind);
+        }
+
+        if (reRoll != "No") {
+          rolledDice = this.RollDice();
+        }
+
+        this.PrintRolledDice();
       }
 
-      // TODO: Calculate points.
-	    // - 3-of-a-kind: 3 points
-	    // - 4-of-a-kind: 6 points
-	    // - 5-of-a-kind: 12 points
-	    // - First to a total of 20 points.
+      int[] occured = this.Occurances();
 
+      if (occured.Contains(5)) {
+        total += 12;
+      } else if (occured.Contains(4)) {
+        total += 6;
+      } else if (occured.Contains(3)) {
+        total += 3;
+      }
+
+      if (GetScorePlayer() >= 20) {
+        return false;
+      }
+
+      Game.Pause();
       this.AddScorePlayer(total);
       this.SwitchPlayer();
       return true; // Continue playing.
     }
 
-    private bool TwoOfAKind() {
-      Dictionary<int, Die> occured = new Dictionary<int, Die>();
+    private Dictionary<int, int> NumberOfAKind() {
+      Dictionary<int, int> occured = new Dictionary<int, int>() {
+        {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0}
+      };
       foreach (Die die in this._dice) {
-        if (!occured.ContainsKey(die.Value)) {
-          occured.Add(die.Value, die);
+        occured[die.Value] += 1;
+      }
+      return occured;
+    }
+
+    private int[] Occurances() {
+      return this.NumberOfAKind()
+        .Select<KeyValuePair<int, int>, int>(kv => kv.Value)
+        .ToArray();
+    }
+
+    private int TwoOfAKind() {
+      foreach (KeyValuePair<int, int> kv in NumberOfAKind()) {
+        if (kv.Value != 2) {
           continue;
         }
 
-        die.Locked = true;
-        occured[die.Value].Locked = true;
-        return true;
+        return kv.Key;
       }
-      return false;
+      return -1;
+    }
+
+    private bool LockTwoDice(int dieValue) {
+      Die[] foundDice = this._dice
+        .Where(die => die.Value == dieValue)
+        .ToArray();
+
+      if (foundDice.Length < 2) {
+        return false;
+      }
+
+      foundDice[0].Locked = true;
+      foundDice[1].Locked = true;
+      return true;
     }
   }
-
 }
