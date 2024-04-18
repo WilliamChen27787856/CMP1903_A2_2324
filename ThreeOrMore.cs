@@ -17,6 +17,8 @@ namespace CMP1903_A2_2324 {
 
       int twoOfAKind = TwoOfAKind();
 
+      // TODO : If player 2 and against computer, auto make move here.
+
       if (twoOfAKind != -1) {
         Game.ScreenPrint("You got a double. Would you like to re-roll the others?");
         string reRoll = Game.Choice(new string[] { "All", "Remaining", "No" });
@@ -46,7 +48,6 @@ namespace CMP1903_A2_2324 {
         return false;
       }
 
-      Game.Pause();
       this.AddScorePlayer(total);
       this.SwitchPlayer();
       return true; // Continue playing.

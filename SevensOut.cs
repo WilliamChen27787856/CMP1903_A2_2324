@@ -30,7 +30,6 @@ namespace CMP1903_A2_2324 {
 
       this.AddScorePlayer(total);
       this.SwitchPlayer();
-      Game.Pause();
       return true; // Continue playing.
     }
 

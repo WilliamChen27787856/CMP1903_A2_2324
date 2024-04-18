@@ -42,6 +42,7 @@ namespace CMP1903_A2_2324 {
     public void Play() {
       do {
         Game.ScreenPrint("=====================");
+        Game.Pause();
       } while (this.NextMove());
       Game.ScreenPrint("=====================");
     }
