@@ -19,6 +19,7 @@ namespace CMP1903_A2_2324 {
     private Statistics() {
       this._highScores = new Dictionary<string, int>();
       this._gamesPlayed = new Dictionary<string, int>();
+      this._allGameRolls = new Dictionary<string, List<int[]>>();
     }
 
     public void AddNewGameRoll(Game game, int[] rolledDie) {
