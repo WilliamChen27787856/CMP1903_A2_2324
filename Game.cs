@@ -1,4 +1,3 @@
-
 using System;
 using System.Text;
 using System.Linq;
@@ -17,8 +16,14 @@ namespace CMP1903_A2_2324 {
           $"{(game.AgainstComputer ? "Computer" : "Player Two")}: scored {game.PlayerOneScore}."
       );
 
+      Statistics.INSTANCE.AddEndGameStats(game);
+
+      Statist
+
       // TODO: Collect statistics.
       // TODO: Perform testing.
+
+
     }
 
     /*
@@ -56,7 +61,9 @@ namespace CMP1903_A2_2324 {
     }
 
     protected int[] RollDice() {
-      return _dice.Select<Die, int>(die => die.Roll()).ToArray();
+      int[] rolledDie = _dice.Select<Die, int>(die => die.Roll()).ToArray();
+      Statistics.INSTANCE.AddNewGameRoll(this, rolledDie);
+      return rolledDie;
     }
 
     protected void PrintRolledDice() {

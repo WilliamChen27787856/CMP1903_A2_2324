@@ -7,23 +7,33 @@ namespace CMP1903_A2_2324 {
 
   public class Statistics {
 
+
+    // Create a lazily-loaded Singleton instance of the Statistics class.
+    private static readonly Lazy<Statistics> lazyStats = new Lazy<Statistics>(() => new Statistics());
+    public static Statistics INSTANCE { get { return lazyStats.Value; } }
+
     private Dictionary<string, int> _highScores;
     private Dictionary<string, int> _gamesPlayed;
+    private Dictionary<string, List<int[]>> _allGameRolls;
 
-    public Statistics() {
-      this._highScores = new();
-      this._gamesPlayed = new();
+    private Statistics() {
+      this._highScores = new Dictionary<string, int>();
+      this._gamesPlayed = new Dictionary<string, int>();
     }
 
-    public void AddPlayedGame(Game game) {
-      // TODO: Add each roll group while the game is playing, rather than at the end.
+    public void AddNewGameRoll(Game game, int[] rolledDie) {
+      DictionaryInit<List<int[]>>(game.GameName, new List<int[]>(), this._allGameRolls);
+      this._allGameRolls[game.GameName].Add(rolledDie);
+    }
+
+    public void AddEndGameStats(Game game) {
       HighScore(game);
       AddGamePlayed(game);
     }
 
-    public bool HighScore(Game game) {
+    private bool HighScore(Game game) {
       DictionaryInit<int>(game.GameName, 0, this._highScores);
-      int highestScore = Math.Max(game.PlayerOneMove, game.PlayerTwoScore);
+      int highestScore = Math.Max(game.PlayerOneScore, game.PlayerTwoScore);
 
       if (highestScore <= this._highScores[game.GameName]) {
         return false;
@@ -33,13 +43,13 @@ namespace CMP1903_A2_2324 {
       return true;
     }
 
-    public void AddGamePlayed(Game game) {
+    private void AddGamePlayed(Game game) {
       DictionaryInit<int>(game.GameName, 0, this._gamesPlayed);
       this._gamesPlayed[game.GameName]++;
     }
 
-    public static void DictionaryInit<V>(string name, T initialValue, Dictionary<string, T> dict) {
-      if (dict.Contains(name)) {
+    public static void DictionaryInit<T>(string name, T initialValue, Dictionary<string, T> dict) {
+      if (dict.ContainsKey(name)) {
         return;
       }
 
