@@ -3,11 +3,12 @@ using System.Linq;
 
 namespace CMP1903_A2_2324 {
 
-  public class SevensOut : Game {
+  public sealed class SevensOut : Game {
 
+    private static readonly string GAME_NAME = "Sevens Out";
     private static readonly int DICE_COUNT = 2;
 
-    public SevensOut(bool againstComputer) : base(DICE_COUNT, 6, againstComputer) {
+    public SevensOut(bool againstComputer) : base(GAME_NAME, DICE_COUNT, 6, againstComputer) {
     }
 
     public override bool NextMove() {

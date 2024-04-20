@@ -4,10 +4,11 @@ using System.Linq;
 
 namespace CMP1903_A2_2324 {
 
-  public class ThreeOrMore : Game {
+  public sealed class ThreeOrMore : Game {
+    private static readonly string GAME_NAME = "Three Or More";
     private static readonly int DICE_COUNT = 5;
 
-    public ThreeOrMore(bool againstComputer) : base(DICE_COUNT, 6, againstComputer) {
+    public ThreeOrMore(bool againstComputer) : base(GAME_NAME, DICE_COUNT, 6, againstComputer) {
     }
 
     public override bool NextMove() {

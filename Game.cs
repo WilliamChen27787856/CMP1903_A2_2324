@@ -1,3 +1,4 @@
+
 using System;
 using System.Text;
 using System.Linq;
@@ -11,9 +12,12 @@ namespace CMP1903_A2_2324 {
       Game game = PickGame();
       game.Play();
       Game.Pause();
+      Game.ScreenPrint($"Player One: scored {game.PlayerOneScore}.");
+      Game.ScreenPrint(
+          $"{(game.AgainstComputer ? "Computer" : "Player Two")}: scored {game.PlayerOneScore}."
+      );
 
       // TODO: Collect statistics.
-      // TODO: Get player scores and print them out.
       // TODO: Perform testing.
     }
 
@@ -23,13 +27,17 @@ namespace CMP1903_A2_2324 {
     * to be written without needing to do anything specific for each game to be played.
     */
 
+    private readonly string _gameName;
+    public string GameName { get { return this._gameName; } }
+
     public bool AgainstComputer { get; private set; }
     public bool PlayerOneMove { get; private set; } = true;
     public int PlayerOneScore { get; protected set; } = 0;
     public int PlayerTwoScore { get; protected set; } = 0;
     protected Die[] _dice;
 
-    public Game(int diceCount, int sidesPerDie, bool againstComputer) {
+    public Game(string gameName, int diceCount, int sidesPerDie, bool againstComputer) {
+      this._gameName = gameName;
       this.AgainstComputer = againstComputer;
       this._dice = new Die[diceCount];
       for (int i = 0; i < diceCount; i++) {
