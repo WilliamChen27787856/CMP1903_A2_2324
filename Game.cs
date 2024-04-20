@@ -18,8 +18,6 @@ namespace CMP1903_A2_2324 {
 
       Statistics.INSTANCE.AddEndGameStats(game);
 
-      Statist
-
       // TODO: Collect statistics.
       // TODO: Perform testing.
 
