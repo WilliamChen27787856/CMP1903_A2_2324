@@ -12,31 +12,14 @@ namespace CMP1903_A2_2324 {
     }
 
     public override bool NextMove() {
-      int total = 0;
-      int[] rolledDice = this.RollDice();
+      this.RollDice();
       this.PrintRolledDice();
 
-      int twoOfAKind = TwoOfAKind();
-
-      // TODO : If player 2 and against computer, auto make move here.
-
-      if (twoOfAKind != -1) {
-        Game.ScreenPrint("You got a double. Would you like to re-roll the others?");
-        string reRoll = Game.Choice(new string[] { "All", "Remaining", "No" });
-
-        if (reRoll == "Remaining") {
-          this.LockTwoDice(twoOfAKind);
-        }
-
-        if (reRoll != "No") {
-          rolledDice = this.RollDice();
-        }
-
-        this.PrintRolledDice();
-      }
+      this.CheckTwoOfAKind();
 
       int[] occured = this.Occurances();
 
+      int total = 0;
       if (occured.Contains(5)) {
         total += 12;
       } else if (occured.Contains(4)) {
@@ -45,22 +28,57 @@ namespace CMP1903_A2_2324 {
         total += 3;
       }
 
-      if (GetScorePlayer() >= 20) {
+      this.AddScorePlayer(total);
+
+      if (this.GetScorePlayer() >= 20) {
         return false;
       }
 
-      this.AddScorePlayer(total);
       this.SwitchPlayer();
       return true; // Continue playing.
     }
 
-    private Dictionary<int, int> NumberOfAKind() {
-      Dictionary<int, int> occured = new Dictionary<int, int>() {
-        {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0}
-      };
-      foreach (Die die in this._dice) {
-        occured[die.Value] += 1;
+    private void CheckTwoOfAKind() {
+      int twoOfAKind = TwoOfAKind();
+
+      if (twoOfAKind == -1) {
+        return;
       }
+
+      bool computerPlaying = this.IsPlayerComputer();
+      bool doLockDie = computerPlaying;
+
+      Game.ScreenPrint($"{this.GetPlayerName()} has got a double.");
+      if (!computerPlaying) {
+        Game.ScreenPrint("Would you like to re-roll the others?");
+        string reRoll = Game.Choice(new string[] { "All", "Remaining", "No" });
+
+        if (reRoll == "No") {
+          return;
+        }
+
+        doLockDie = reRoll == "Remaining";
+      }
+
+      if (doLockDie) {
+        this.LockTwoDice(twoOfAKind);
+      }
+
+      this.RollDice();
+      this.PrintRolledDice();
+    }
+
+    private Dictionary<int, int> NumberOfAKind() {
+      Dictionary<int, int> occured = new Dictionary<int, int>();
+
+      foreach (Die die in this._dice) {
+        int value = die.Value;
+        if (!occured.ContainsKey(value)) {
+          occured.Add(value, 0);
+        }
+        occured[value] += 1;
+      }
+
       return occured;
     }
 

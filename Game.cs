@@ -8,20 +8,16 @@ namespace CMP1903_A2_2324 {
   public abstract class Game {
 
     public static void Main(string[] args) {
-      Game game = PickGame();
+      Game game = PickGame(true);
       game.Play();
       Game.Pause();
       Game.ScreenPrint($"Player One: scored {game.PlayerOneScore}.");
       Game.ScreenPrint(
-          $"{(game.AgainstComputer ? "Computer" : "Player Two")}: scored {game.PlayerOneScore}."
+          $"{(game.AgainstComputer ? "Computer" : "Player Two")}: scored {game.PlayerTwoScore}."
       );
-
       Statistics.INSTANCE.AddEndGameStats(game);
 
-      // TODO: Collect statistics.
       // TODO: Perform testing.
-
-
     }
 
     /*
@@ -46,6 +42,7 @@ namespace CMP1903_A2_2324 {
       for (int i = 0; i < diceCount; i++) {
         this._dice[i] = new Die(sidesPerDie);
       }
+
     }
 
     public abstract bool NextMove();
@@ -53,7 +50,9 @@ namespace CMP1903_A2_2324 {
     public void Play() {
       do {
         Game.ScreenPrint("=====================");
-        Game.Pause();
+        if (!this.IsPlayerComputer()) {
+          Game.Pause($"{this.GetPlayerName()}'s turn, press enter to roll the dice: ");
+        }
       } while (this.NextMove());
       Game.ScreenPrint("=====================");
     }
@@ -100,18 +99,22 @@ namespace CMP1903_A2_2324 {
       }
     }
 
+    protected bool IsPlayerComputer() {
+      return !this.PlayerOneMove && this.AgainstComputer;
+    }
+
     /*
     * All code below this point is utilities for console applications, these are not required for
     * GUI applications.
     */
-    public static Game PickGame() {
+    public static Game PickGame(bool againstComputer = false) {
       Game.ScreenPrint("What game would you like to play?");
       string gameChoice = Choice(new string[] { "Sevens Out", "Three or More" });
       switch (gameChoice) {
         case "Sevens Out":
-          return new SevensOut(true);
+          return new SevensOut(againstComputer);
         default:
-          return new ThreeOrMore(true);
+          return new ThreeOrMore(againstComputer);
       }
     }
 
@@ -132,14 +135,16 @@ namespace CMP1903_A2_2324 {
       return Console.ReadLine();
     }
 
-    public static bool Pause() {
+    public static bool Pause(string message = "") {
+      Game.ScreenPrint(message, false);
       Console.ReadKey();
       return true;
     }
 
     /*
-    * These methods below would only be need to be rewritten if they were to
-    * display text differently to a single text box in a GUI.
+    * The following methods make use of the above wrapper methods and so do not need
+    * re-implementing, unless for the purpose of removing parts, such as the
+    * line dividers.
     */
     public static T Choice<T>(T[] choices) {
       Game.ScreenPrint("=====================");
