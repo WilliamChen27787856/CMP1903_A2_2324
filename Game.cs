@@ -8,7 +8,24 @@ namespace CMP1903_A2_2324 {
   public abstract class Game {
 
     public static void Main(string[] args) {
-      Game game = PickGame(true);
+      // TODO: Perform testing.
+      while (MainMenu()) {
+      }
+    }
+
+
+    public static Game PickGame(bool againstComputer = false) {
+      Game.ScreenPrint("What game would you like to play?");
+      string gameChoice = Choice(new string[] { "Sevens Out", "Three or More" });
+      switch (gameChoice) {
+        case "Sevens Out":
+          return new SevensOut(againstComputer);
+        default:
+          return new ThreeOrMore(againstComputer);
+      }
+    }
+
+    public static void RunGame(Game game) {
       game.Play();
       Game.Pause();
       Game.ScreenPrint($"Player One: scored {game.PlayerOneScore}.");
@@ -16,8 +33,22 @@ namespace CMP1903_A2_2324 {
           $"{(game.AgainstComputer ? "Computer" : "Player Two")}: scored {game.PlayerTwoScore}."
       );
       Statistics.INSTANCE.AddEndGameStats(game);
+    }
 
-      // TODO: Perform testing.
+    public static bool MainMenu() {
+      string option = Choice<string>(new string[] { "Play Game", "View Statistics", "Quit" });
+      if (option == "Quit") {
+        return false;
+      }
+
+      if (option == "Play Game") {
+        Game game = Game.PickGame(true);
+        Game.RunGame(game);
+      } else {
+        Console.WriteLine(Statistics.INSTANCE.ToString());
+      }
+
+      return true;
     }
 
     /*
@@ -102,22 +133,6 @@ namespace CMP1903_A2_2324 {
     protected bool IsPlayerComputer() {
       return !this.PlayerOneMove && this.AgainstComputer;
     }
-
-    /*
-    * All code below this point is utilities for console applications, these are not required for
-    * GUI applications.
-    */
-    public static Game PickGame(bool againstComputer = false) {
-      Game.ScreenPrint("What game would you like to play?");
-      string gameChoice = Choice(new string[] { "Sevens Out", "Three or More" });
-      switch (gameChoice) {
-        case "Sevens Out":
-          return new SevensOut(againstComputer);
-        default:
-          return new ThreeOrMore(againstComputer);
-      }
-    }
-
 
     /*
     * Method below here would be required to be re-implemented to work in a GUI.
