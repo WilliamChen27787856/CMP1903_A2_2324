@@ -37,6 +37,7 @@ namespace CMP1903_A2_2324 {
 
     public static bool MainMenu() {
       string option = Choice<string>(new string[] { "Play Game", "View Statistics", "Quit" });
+
       if (option == "Quit") {
         return false;
       }
