@@ -17,17 +17,7 @@ namespace CMP1903_A2_2324 {
 
       this.CheckTwoOfAKind();
 
-      int[] occured = this.Occurances();
-
-      int total = 0;
-      if (occured.Contains(5)) {
-        total += 12;
-      } else if (occured.Contains(4)) {
-        total += 6;
-      } else if (occured.Contains(3)) {
-        total += 3;
-      }
-
+      int total = ThreeOrMore.GetScoreFromValues(this.DieValues);
       this.AddScorePlayer(total);
 
       if (this.GetScorePlayer() >= 20) {
@@ -68,28 +58,8 @@ namespace CMP1903_A2_2324 {
       this.PrintRolledDice();
     }
 
-    private Dictionary<int, int> NumberOfAKind() {
-      Dictionary<int, int> occured = new Dictionary<int, int>();
-
-      foreach (Die die in this._dice) {
-        int value = die.Value;
-        if (!occured.ContainsKey(value)) {
-          occured.Add(value, 0);
-        }
-        occured[value] += 1;
-      }
-
-      return occured;
-    }
-
-    private int[] Occurances() {
-      return this.NumberOfAKind()
-        .Select<KeyValuePair<int, int>, int>(kv => kv.Value)
-        .ToArray();
-    }
-
     private int TwoOfAKind() {
-      foreach (KeyValuePair<int, int> kv in NumberOfAKind()) {
+      foreach (KeyValuePair<int, int> kv in ThreeOrMore.GetFrequencies(this.DieValues)) {
         if (kv.Value != 2) {
           continue;
         }
@@ -111,6 +81,43 @@ namespace CMP1903_A2_2324 {
       foundDice[0].Locked = true;
       foundDice[1].Locked = true;
       return true;
+    }
+
+    public static int GetScoreFromValues(int[] values) {
+      int[] occured = ThreeOrMore.Occurances(ThreeOrMore.GetFrequencies(values));
+      int total = ThreeOrMore.CalculateScore(occured);
+      return total;
+    }
+
+    public static Dictionary<int, int> GetFrequencies(int[] values) {
+      Dictionary<int, int> occured = new Dictionary<int, int>();
+
+      foreach (int value in values) {
+        if (!occured.ContainsKey(value)) {
+          occured.Add(value, 0);
+        }
+
+        occured[value] += 1;
+      }
+
+      return occured;
+    }
+
+    public static int[] Occurances(Dictionary<int, int> valueFreqs) {
+      return valueFreqs
+        .Select<KeyValuePair<int, int>, int>(kv => kv.Value)
+        .ToArray();
+    }
+
+    public static int CalculateScore(int[] diceFreq) {
+      if (diceFreq.Contains(5)) {
+        return 12;
+      } else if (diceFreq.Contains(4)) {
+        return 6;
+      } else if (diceFreq.Contains(3)) {
+        return 3;
+      }
+      return 0;
     }
   }
 }

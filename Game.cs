@@ -8,11 +8,9 @@ namespace CMP1903_A2_2324 {
   public abstract class Game {
 
     public static void Main(string[] args) {
-      // TODO: Perform testing.
-      // while (MainMenu()) {
-      // }
-      Testing.TestSevensOut();
-      Testing.TestThreeOrMore();
+      //while (MainMenu()) {
+      //}
+      Testing.RunGameTests();
     }
 
     public static Game PickGame(bool againstComputer = false) {
@@ -101,8 +99,7 @@ namespace CMP1903_A2_2324 {
     protected void PrintRolledDice() {
       StringBuilder sb = new StringBuilder();
       sb.Append($"{this.GetPlayerName()} has rolled: ");
-      sb.AppendJoin<Die>(", ", this._dice);
-      sb.AppendLine(this.ToString());
+      sb.Append(this.ToString());
       sb.Append(".");
       Game.ScreenPrint(sb.ToString());
     }
