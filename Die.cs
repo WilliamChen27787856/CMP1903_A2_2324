@@ -23,14 +23,19 @@ namespace CMP1903_A2_2324 {
     /// </value>
     public int Value { get; private set; }
 
+    /// <value>
+    /// The <c>Locked</c> property is used to prevent a die from being rolled.
+    /// </value>
     public bool Locked { get; set; } = false;
 
-    public Die() {
-      this.Value = _random.Next(1, NumberOfSides + 1);
-      this.NumberOfSides = 6;
-    }
-
-    public Die(int numberOfSides) {
+    /// <summary>
+    /// Create constructor that allows for the setting of the number of sides on the die.
+    /// </summary>
+    /// <param name="numberOfSides">
+    /// Represents the number of sides that the die will have.
+    /// Defaults to 6.
+    /// </param>
+    public Die(int numberOfSides = 6) {
       this.Value = _random.Next(1, NumberOfSides + 1);
       this.NumberOfSides = numberOfSides;
     }
@@ -42,11 +47,18 @@ namespace CMP1903_A2_2324 {
     /// An integer of the side the die displayed once rolled.
     /// </returns>
     public int Roll() {
-      if (!Locked)
+      if (!Locked) {
         Value = _random.Next(1, NumberOfSides + 1);
+      }
       return Value;
     }
 
+    /// <summary>
+    /// Overrides the default ToString method to print the die's value.
+    /// </summary>
+    /// <returns>
+    /// A string containing the die's current value.
+    /// </returns>
     public override string ToString() {
       return this.Value.ToString();
     }

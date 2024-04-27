@@ -7,12 +7,25 @@ namespace CMP1903_A2_2324 {
 
   public abstract class Game {
 
-    public static void Main(string[] args) {
+    /// <summary>
+    /// This is the programt's entry point.
+    /// </summary>
+    public static void Main() {
       //while (MainMenu()) {
       //}
       Testing.RunGameTests();
     }
 
+    /// <summary>
+    /// This method is used to decide what game should be played.
+    /// <summary>
+    /// <param name="againstComputer">
+    /// A boolean value to decide if the game should be against a computer or not.
+    /// Defaults to false (not against computer).
+    /// </param>
+    /// <returns>
+    /// An instance of a class that extends the <c>Game</c> class.
+    /// </returns>
     public static Game PickGame(bool againstComputer = false) {
       Game.ScreenPrint("What game would you like to play?");
       string gameChoice = Choice(new string[] { "Sevens Out", "Three or More" });
@@ -24,6 +37,12 @@ namespace CMP1903_A2_2324 {
       }
     }
 
+    /// <summary>
+    /// This method is used to perform the basic parts of running and logging game information.
+    /// </summary>
+    /// <param name="game">
+    /// A <c>Game</c> object to start playing.
+    /// </param>
     public static void RunGame(Game game) {
       game.Play();
       Game.Pause();
@@ -34,6 +53,13 @@ namespace CMP1903_A2_2324 {
       Statistics.INSTANCE.AddEndGameStats(game);
     }
 
+    /// <summary>
+    /// Displays the main menu and allows for the player to choose between playing a game,
+    /// viewing statistics of previous games and to quit.
+    /// </summary>
+    /// <returns>
+    /// A boolean, false if the program should quit, true if the user has selected another option.
+    /// </returns>
     public static bool MainMenu() {
       string option = Choice<string>(new string[] { "Play Game", "View Statistics", "Quit" });
 
