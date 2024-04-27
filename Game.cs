@@ -9,10 +9,11 @@ namespace CMP1903_A2_2324 {
 
     public static void Main(string[] args) {
       // TODO: Perform testing.
-      while (MainMenu()) {
-      }
+      // while (MainMenu()) {
+      // }
+      Testing.TestSevensOut();
+      Testing.TestThreeOrMore();
     }
-
 
     public static Game PickGame(bool againstComputer = false) {
       Game.ScreenPrint("What game would you like to play?");
@@ -66,6 +67,8 @@ namespace CMP1903_A2_2324 {
     public int PlayerOneScore { get; protected set; } = 0;
     public int PlayerTwoScore { get; protected set; } = 0;
     protected Die[] _dice;
+    public int DieSum { get { return this._dice.Sum<Die>(die => die.Value); } }
+    public int[] DieValues { get { return this._dice.Select<Die, int>(die => die.Value).ToArray(); } }
 
     public Game(string gameName, int diceCount, int sidesPerDie, bool againstComputer) {
       this._gameName = gameName;
@@ -99,6 +102,7 @@ namespace CMP1903_A2_2324 {
       StringBuilder sb = new StringBuilder();
       sb.Append($"{this.GetPlayerName()} has rolled: ");
       sb.AppendJoin<Die>(", ", this._dice);
+      sb.AppendLine(this.ToString());
       sb.Append(".");
       Game.ScreenPrint(sb.ToString());
     }
@@ -135,23 +139,39 @@ namespace CMP1903_A2_2324 {
       return !this.PlayerOneMove && this.AgainstComputer;
     }
 
+    public override string ToString() {
+      return new StringBuilder().AppendJoin<Die>(", ", this._dice).ToString();
+    }
+
     /*
     * Method below here would be required to be re-implemented to work in a GUI.
     * They act as a wrapper so we do not need to replace the functions throughout
     * the rest of the program's code.
     */
 
+    public static bool DEBUG = false;
+    public static string DEBUG_INPUT = "";
+
     public static string ScreenPrint(string text, bool newLine = true) {
+      if (DEBUG) {
+        return text;
+      }
       Console.Write(text + (newLine ? "\n" : ""));
       return text;
     }
 
     public static string UserInput(string text = "Input > ") {
+      if (DEBUG) {
+        return DEBUG_INPUT;
+      }
       ScreenPrint(text, false);
       return Console.ReadLine();
     }
 
     public static bool Pause(string message = "") {
+      if (DEBUG) {
+        return true;
+      }
       Game.ScreenPrint(message, false);
       Console.ReadKey();
       return true;

@@ -16,7 +16,6 @@ namespace CMP1903_A2_2324 {
     /// </remarks>
     private static readonly Random _random = new Random();
 
-
     public int NumberOfSides { get; private set; }
 
     /// <value>
