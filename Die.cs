@@ -54,7 +54,7 @@ namespace CMP1903_A2_2324 {
     }
 
     /// <summary>
-    /// Overrides the default ToString method to print the die's value.
+    /// Overrides the default ToString method to return the die's value.
     /// </summary>
     /// <returns>
     /// A string containing the die's current value.

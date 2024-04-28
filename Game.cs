@@ -5,6 +5,14 @@ using System.Collections.Generic;
 
 namespace CMP1903_A2_2324 {
 
+  /// <summary>
+  /// An abstract class that acts as both the program entry-point and a base class for the
+  /// individual game objects.
+  /// </summary>
+  /// <remarks>
+  /// This class has to be the main class/contain the program entry-point to abide by the brief
+  /// only allowing 6 classes in the program.
+  /// </remarks>
   public abstract class Game {
 
     /// <summary>
@@ -83,19 +91,69 @@ namespace CMP1903_A2_2324 {
     * to be written without needing to do anything specific for each game to be played.
     */
 
-    private readonly string _gameName;
-    public string GameName { get { return this._gameName; } }
+    /// <value>
+    /// A string property that stores the game name as an identifier for identifying the game type.
+    /// </value>
+    public string GameName { get; private set; }
 
+    /// <value>
+    /// A boolean property used to store if the program if player 2 is the computer or not.
+    /// </value>
     public bool AgainstComputer { get; private set; }
+
+    /// <value>
+    /// A boolean property used to store if the current move is player 1 or player 2.
+    /// Player 1 = True, Player 2 = False.
+    /// </value>
     public bool PlayerOneMove { get; private set; } = true;
+
+    /// <value>
+    /// An integer property to store the current score of player 1.
+    /// </value>
     public int PlayerOneScore { get; protected set; } = 0;
+
+    /// <value>
+    /// An integer property to store the current score of player 2.
+    /// </value>
     public int PlayerTwoScore { get; protected set; } = 0;
+
+    /// <value>
+    /// A field that stores all of the Die objects associated with the Game being played.
+    /// </value>
     protected Die[] _dice;
+
+    /// <value>
+    /// An integer property that retrieves the current sum of all the values on the dice stored in
+    /// <c>_dice</c>.
+    /// </value>
     public int DieSum { get { return this._dice.Sum<Die>(die => die.Value); } }
+
+    /// <value>
+    /// An array of integers property that stores the current die mapped to their current int value.
+    /// </value>
     public int[] DieValues { get { return this._dice.Select<Die, int>(die => die.Value).ToArray(); } }
 
+    /// <summary>
+    /// The constructor for the Game object.
+    /// </summary>
+    /// <param name="gameName">
+    /// A string value for the game's identifier.
+    /// </param>
+    /// <param name="diceCount">
+    /// An integer value for the number of die used in the game.
+    /// </param>
+    /// <param name="sidesPerDie">
+    /// An integer value for the number of sides each die has.
+    /// </param>
+    /// <param name="againstComputer">
+    /// A boolean representing if the game is against a computer or not.
+    /// </param>
+    /// <remarks>
+    /// Most of these parameters are not used in object instantiation and are instead
+    /// hard-programmed into the individual game constructors.
+    /// </remarks>
     public Game(string gameName, int diceCount, int sidesPerDie, bool againstComputer) {
-      this._gameName = gameName;
+      this.GameName = gameName;
       this.AgainstComputer = againstComputer;
       this._dice = new Die[diceCount];
       for (int i = 0; i < diceCount; i++) {
@@ -104,9 +162,25 @@ namespace CMP1903_A2_2324 {
 
     }
 
+    /// <summary>
+    /// An abstract class that requires implementation, it is used to play each move in the game.
+    /// </summary>
+    /// <returns>
+    /// A boolean value representing if the game is over or not
+    /// (true = continue, false = game over).
+    /// </returns>
     public abstract bool NextMove();
 
-    public void Play() {
+    /// <summary>
+    /// The standard implementation of the Play method continually calls the NextMove method until
+    /// the game is over.
+    /// This method is virtual so that if required games can override this default code.
+    /// </summary>
+    /// <remarks>
+    /// This method is not overwritten by any of the current games however to allow extensibility
+    /// this method is virtual.
+    /// </remarks>
+    public virtual void Play() {
       do {
         Game.ScreenPrint("=====================");
         if (!this.IsPlayerComputer()) {
@@ -116,12 +190,23 @@ namespace CMP1903_A2_2324 {
       Game.ScreenPrint("=====================");
     }
 
+    /// <summary>
+    /// A method that allows for all of the games to roll all the dice and add the rolls to the
+    /// statistics singleton.
+    /// </summary>
+    /// <returns>
+    /// An array of all the integer values on the dice.
+    /// </returns>
     protected int[] RollDice() {
       int[] rolledDie = _dice.Select<Die, int>(die => die.Roll()).ToArray();
       Statistics.INSTANCE.AddNewGameRoll(this, rolledDie);
       return rolledDie;
     }
 
+    /// <summary>
+    /// A method that will print out the current dice values with a message saying the player who
+    /// rolled them.
+    /// </summary>
     protected void PrintRolledDice() {
       StringBuilder sb = new StringBuilder();
       sb.Append($"{this.GetPlayerName()} has rolled: ");
@@ -130,11 +215,24 @@ namespace CMP1903_A2_2324 {
       Game.ScreenPrint(sb.ToString());
     }
 
+    /// <summary>
+    /// A method that makes it easy to switch the players.
+    /// </summary>
+    /// <remarks>
+    /// This method also unlocks all of the dice in the game incase the game requires dice locking.
+    /// </remarks>
     protected void SwitchPlayer() {
       this.PlayerOneMove = !this.PlayerOneMove;
       this.UnlockAllDie(); // As a precaution, ensure no die is locked for next turn.
     }
 
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns>
+    ///
+    /// </returns>
     protected void AddScorePlayer(int amount) {
       if (this.PlayerOneMove) {
         this.PlayerOneScore += amount;
@@ -144,24 +242,51 @@ namespace CMP1903_A2_2324 {
       Game.ScreenPrint($"{this.GetPlayerName()}: {amount} added to total ({this.GetScorePlayer()})");
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns>
+    ///
+    /// </returns>
     protected int GetScorePlayer() {
       return this.PlayerOneMove ? PlayerOneScore : PlayerTwoScore;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns>
+    ///
+    /// </returns>
     protected string GetPlayerName() {
       return this.PlayerOneMove ? "Player One" : (this.AgainstComputer ? "Computer" : "Player Two");
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     protected void UnlockAllDie() {
       foreach (Die die in this._dice) {
         die.Locked = false;
       }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns>
+    ///
+    /// </returns>
     protected bool IsPlayerComputer() {
       return !this.PlayerOneMove && this.AgainstComputer;
     }
 
+    /// <summary>
+    /// Overrides the default ToString method to return all of the dice values.
+    /// </summary>
+    /// <returns>
+    /// A string containing the current value of all of the dice.
+    /// </returns>
     public override string ToString() {
       return new StringBuilder().AppendJoin<Die>(", ", this._dice).ToString();
     }
