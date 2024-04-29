@@ -5,12 +5,21 @@ using System.Collections.Generic;
 
 namespace CMP1903_A2_2324 {
 
-  // TODO: Add XML comments to class.
-
+  /// <summary>
+  /// This is the testing class, it is used to run tests to ensure no parts of the program are
+  /// broken.
+  /// </summary>
   public class Testing {
 
+    /// <value>
+    /// A constant integer that is used to specify a standard number of tests to ensure the
+    /// the different bits don't have any other issues.
+    /// </value>
     public const int TEST_COUNT = 10_000;
 
+    /// <summary>
+    /// A static method used to run all the tests from one method.
+    /// </summary>
     public static void RunTests() {
       TestDie(); // Test the Die object.
       TestFrequencies(); // Test colle.cting frequencies into a dictionary
@@ -23,6 +32,9 @@ namespace CMP1903_A2_2324 {
       }
     }
 
+    /// <summary>
+    /// A static method to test the <c>ThreeOrMore.TwoOfAKind</c> method.
+    /// </summary>
     public static void TestTwoOfAKind() {
       int first = ThreeOrMore.TwoOfAKind(new int[] { 1, 1, 2, 3, 4, 4 });
       int second = ThreeOrMore.TwoOfAKind(new int[] { 1, 2, 3, 4, 4 });
@@ -35,6 +47,9 @@ namespace CMP1903_A2_2324 {
       Debug.Assert(fourth == -1, "Failed to find double.");
     }
 
+    /// <summary>
+    /// A static method to test the <c>ThreeOrMore.GetFrequencies</c> method.
+    /// </summary>
     public static void TestFrequencies() {
       Dictionary<int, int> freqs = ThreeOrMore.GetFrequencies(
         new int[] { 1, 4, 1, 2, 2, 1, 3, 5, 6 }
@@ -48,6 +63,9 @@ namespace CMP1903_A2_2324 {
       Debug.Assert(freqs[6] == 1, "Invalid frequency check.");
     }
 
+    /// <summary>
+    /// A static method to test the <c>ThreeOrMore.Occurances</c> method.
+    /// </summary>
     public static void TestOccurances() {
       int[] occurances = ThreeOrMore.Occurances(new Dictionary<int, int>() {
         [1] = 3, [2] = 8, [3] = 5, [4] = 6
@@ -58,6 +76,9 @@ namespace CMP1903_A2_2324 {
       Debug.Assert(occurances[3] == 6, "Fourth occurance checked.");
     }
 
+    /// <summary>
+    /// A static method to test the <c>Die</c> class.
+    /// </summary>
     public static void TestDie() {
       Die die = new Die();
       Die lockedDie = new Die();
@@ -82,6 +103,9 @@ namespace CMP1903_A2_2324 {
       Debug.Assert(numsOccured.Count == die.NumberOfSides, "Too many dice values.");
     }
 
+    /// <summary>
+    /// A static method to test the <c>ThreeOrMore.CalculateScore</c> method.
+    /// </summary>
     public static void TestThreeOrMoreScore() {
       int scoreTwelve = ThreeOrMore.CalculateScore(new int[] { 4, 2, 5, 3 });
       int scoreSix = ThreeOrMore.CalculateScore(new int[] { 4, 2, 3, 1 });
@@ -94,6 +118,9 @@ namespace CMP1903_A2_2324 {
       Debug.Assert(scoreZero == 0, "Score should be 0.");
     }
 
+    /// <summary>
+    /// A static method to test the <c>SevensOut</c> game.
+    /// </summary>
     public static void TestSevensOut() {
       Game.DEBUG = true;
       Game game = new SevensOut(true);
@@ -112,6 +139,9 @@ namespace CMP1903_A2_2324 {
       Game.DEBUG = false;
     }
 
+    /// <summary>
+    /// A static method to test the <c>ThreeOrMore</c> game.
+    /// </summary>
     public static void TestThreeOrMore() {
       Game.DEBUG = true;
       Game.DEBUG_INPUT = "1"; // Responds to re-roll questions with to re-roll remaining die.

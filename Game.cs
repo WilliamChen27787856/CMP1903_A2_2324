@@ -20,8 +20,8 @@ namespace CMP1903_A2_2324 {
     /// </summary>
     public static void Main() {
       Testing.RunTests();
-      //while (MainMenu()) {
-      //}
+      while (MainMenu()) {
+      }
     }
 
     /// <summary>
