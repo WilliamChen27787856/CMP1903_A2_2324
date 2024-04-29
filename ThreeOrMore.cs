@@ -112,7 +112,7 @@ namespace CMP1903_A2_2324 {
           continue;
         }
 
-        return kv.Value;
+        return kv.Key;
       }
       return -1;
     }
@@ -183,14 +183,15 @@ namespace CMP1903_A2_2324 {
     /// An integer representing the score calculated for the player.
     /// </returns>
     public static int CalculateScore(int[] diceFreq) {
-      if (diceFreq.Contains(5)) { // 5 of same dice = scores 12.
-        return 12;
-      } else if (diceFreq.Contains(4)) {
-        return 6; // 4 of the same dice = scores 6.
-      } else if (diceFreq.Contains(3)) {
-        return 3; // 3 of the same dice = 3.
+      switch (diceFreq.Max()) {
+        case 5:
+          return 12;
+        case 4:
+          return 6;
+        case 3:
+          return 3;
       }
-      return 0; // Anything other that dice with frequencies of 5 to 3 scores 0.
+      return 0;
     }
   }
 }

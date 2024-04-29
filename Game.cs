@@ -19,9 +19,9 @@ namespace CMP1903_A2_2324 {
     /// This is the program entry point.
     /// </summary>
     public static void Main() {
-      Testing.RunGameTests();
-      while (MainMenu()) {
-      }
+      Testing.RunTests();
+      //while (MainMenu()) {
+      //}
     }
 
     /// <summary>
