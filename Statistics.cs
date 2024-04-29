@@ -68,6 +68,7 @@ namespace CMP1903_A2_2324 {
         sb.AppendLine($"============= {gameName} =============");
         sb.AppendLine($"High Score: {this._highScores[gameName]}");
         sb.AppendLine($"Games Played: {this._gamesPlayed[gameName]}");
+        // TODO: Add statistics.
         sb.AppendLine($"=============={new string('=', gameName.Length)}==============");
         sb.AppendLine();
       }

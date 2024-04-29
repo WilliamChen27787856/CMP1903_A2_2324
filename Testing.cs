@@ -6,7 +6,7 @@ namespace CMP1903_A2_2324 {
 
   public class Testing {
 
-    public const int TEST_COUNT = 1_000;
+    public const int TEST_COUNT = 10_000;
 
     public static void RunGameTests() {
       for (int i = 0; i < TEST_COUNT; i++) {

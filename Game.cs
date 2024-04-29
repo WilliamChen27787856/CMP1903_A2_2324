@@ -16,12 +16,12 @@ namespace CMP1903_A2_2324 {
   public abstract class Game {
 
     /// <summary>
-    /// This is the programt's entry point.
+    /// This is the program entry point.
     /// </summary>
     public static void Main() {
+      Testing.RunGameTests();
       while (MainMenu()) {
       }
-      Testing.RunGameTests();
     }
 
     /// <summary>
@@ -58,7 +58,9 @@ namespace CMP1903_A2_2324 {
       Game.ScreenPrint(
           $"{(game.AgainstComputer ? "Computer" : "Player Two")}: scored {game.PlayerTwoScore}."
       );
-      Statistics.INSTANCE.AddEndGameStats(game);
+      if (!Game.DEBUG) {
+        Statistics.INSTANCE.AddEndGameStats(game);
+      }
     }
 
     /// <summary>
@@ -199,7 +201,9 @@ namespace CMP1903_A2_2324 {
     /// </returns>
     protected int[] RollDice() {
       int[] rolledDie = _dice.Select<Die, int>(die => die.Roll()).ToArray();
-      Statistics.INSTANCE.AddNewGameRoll(this, rolledDie);
+      if (!Game.DEBUG) {
+        Statistics.INSTANCE.AddNewGameRoll(this, rolledDie);
+      }
       return rolledDie;
     }
 
@@ -228,11 +232,8 @@ namespace CMP1903_A2_2324 {
 
 
     /// <summary>
-    ///
+    /// A method that finds the current player playing and adds an amount to their score.
     /// </summary>
-    /// <returns>
-    ///
-    /// </returns>
     protected void AddScorePlayer(int amount) {
       if (this.PlayerOneMove) {
         this.PlayerOneScore += amount;
@@ -243,27 +244,29 @@ namespace CMP1903_A2_2324 {
     }
 
     /// <summary>
-    ///
+    /// A method that gets the score of the currently active player.
     /// </summary>
     /// <returns>
-    ///
+    /// An integer value of the player's score.
     /// </returns>
     protected int GetScorePlayer() {
       return this.PlayerOneMove ? PlayerOneScore : PlayerTwoScore;
     }
 
     /// <summary>
-    ///
+    /// A method that gets the name of the currently active player.
+    /// It also takes into account if player 2 is the computer or not.
     /// </summary>
     /// <returns>
-    ///
+    /// A string of the name given to the player.
     /// </returns>
     protected string GetPlayerName() {
       return this.PlayerOneMove ? "Player One" : (this.AgainstComputer ? "Computer" : "Player Two");
     }
 
     /// <summary>
-    ///
+    /// A method that is used to apply Locked = false to every Die object within the game.
+    /// This is useful to reset state between games.
     /// </summary>
     protected void UnlockAllDie() {
       foreach (Die die in this._dice) {
@@ -272,10 +275,10 @@ namespace CMP1903_A2_2324 {
     }
 
     /// <summary>
-    ///
+    /// A method to return if the current player is a computer or not.
     /// </summary>
     /// <returns>
-    ///
+    /// A boolean, true if the player is a computer, false otherwise.
     /// </returns>
     protected bool IsPlayerComputer() {
       return !this.PlayerOneMove && this.AgainstComputer;
@@ -297,9 +300,39 @@ namespace CMP1903_A2_2324 {
     * the rest of the program's code.
     */
 
+    /// <value>
+    /// This static field is used to stores if the program should be placed into Debug mode,
+    /// it is used to remove logging and user input questions.
+    /// </value>
+    /// <remarks>
+    /// This is only useful for the Testing class purposes and otherwise should remain false.
+    /// </remarks>
     public static bool DEBUG = false;
+
+    /// <value>
+    /// This is a static field that depends on the <c>DEBUG</c> field being true, it is used to
+    /// force user-input when a question should be asked so the game can be tested headlessly.
+    /// </value>
     public static string DEBUG_INPUT = "";
 
+    /// <summary>
+    /// The ScreenPrint method acts as a wrapper for displaying text to the screen.
+    /// </summary>
+    /// <param name="text">
+    /// A string for the text to display to the screen.
+    /// </param>
+    /// <param name="newLine">
+    /// A boolean for if there should be a newline character appended to the end of the string.
+    /// </param>
+    /// <returns>
+    /// The string that has been added to the screen.
+    /// </returns>
+    /// <remarks>
+    /// For the purpose of this program this just performs a <c>Console.WriteLine</c> call, but
+    /// if the program was to be converted to a GUI program this could be reimplemented to either
+    /// display new text elements of add text to a 'display queue' for text that needs to be put
+    /// to the screen.
+    /// </remarks>
     public static string ScreenPrint(string text, bool newLine = true) {
       if (DEBUG) {
         return text;
@@ -308,14 +341,41 @@ namespace CMP1903_A2_2324 {
       return text;
     }
 
+    /// <summary>
+    /// The ScreenPrint method acts as a wrapper for taking the user input.
+    /// </summary>
+    /// <param name="text">
+    /// A string parameter that takes the text that should be displayed before the input is taken.
+    /// </param>
+    /// <returns>
+    /// A string of the input the user gave.
+    /// </returns>
+    /// <remarks>
+    /// This currently performs a <c>Console.ReadLine</c> call, but it could be replaced to take
+    /// input from an input box.
+    /// </remarks>
     public static string UserInput(string text = "Input > ") {
       if (DEBUG) {
         return DEBUG_INPUT;
       }
-      ScreenPrint(text, false);
+      Game.ScreenPrint(text, false);
       return Console.ReadLine();
     }
 
+    /// <summary>
+    /// This is a wrapper method that is used to pause until an input is given to continue program
+    /// execution.
+    /// </summary>
+    /// <param name="message">
+    /// A string parameter that takes the text that should be displayed.
+    /// </param>
+    /// <returns>
+    /// A boolean value for if the game was successfully paused.
+    /// </returns>
+    /// <remarks>
+    /// Currently this method only returns true as there is no case where the game cannot pause.
+    /// However, in a GUI application there could be cases where this is not possible.
+    /// </remarks>
     public static bool Pause(string message = "") {
       if (DEBUG) {
         return true;
@@ -330,6 +390,21 @@ namespace CMP1903_A2_2324 {
     * re-implementing, unless for the purpose of removing parts, such as the
     * line dividers.
     */
+
+    /// <summary>
+    /// This is a generic method that allows for an item of any type to be chosen from an array in
+    /// a program-standardised interface.
+    /// </summary>
+    /// <param name="choices">
+    /// The array of items
+    /// </param>
+    /// <returns>
+    /// An object of generic type T that the user selected.
+    /// </returns>
+    /// <remarks>
+    /// This method would likely need new implementation to make it user-interface friendly,
+    /// however the method signature would not need many changes.
+    /// </remarks>
     public static T Choice<T>(T[] choices) {
       Game.ScreenPrint("=====================");
       for (int i = 0; i < choices.Length; i++) {
@@ -339,6 +414,18 @@ namespace CMP1903_A2_2324 {
       return choices[IntChoice(0, choices.Length - 1)];
     }
 
+    /// <summary>
+    /// This is a static helper method to make taking a user input of type int easier.
+    /// </summary>
+    /// <param name="min">
+    /// An integer of the minimum value that can be entered.
+    /// </param>
+    /// <param name="max">
+    /// An integer of the maximum value that can be entered.
+    /// </param>
+    /// <returns>
+    /// An integer from the user input.
+    /// </returns>
     public static int IntChoice(int min, int max) {
       while (true) {
         try {
