@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CMP1903_A2_2324 {
 
@@ -97,23 +97,51 @@ namespace CMP1903_A2_2324 {
         .ForEach(die => die.Locked = true);
     }
 
+    /// <summary>
+    /// A method which is used to detect any dice that have a frequency of exactly 2.
+    /// </summary>
+    /// <param name="diceRolled">
+    /// An array of ints representing the side value of each of dice.
+    /// </param>
+    /// <returns>
+    /// The value of the die that is a double, or a -1 if non is found.
+    /// </returns>
     public static int TwoOfAKind(int[] diceRolled) {
       foreach (KeyValuePair<int, int> kv in ThreeOrMore.GetFrequencies(diceRolled)) {
         if (kv.Value != 2) {
           continue;
         }
 
-        return kv.Key;
+        return kv.Value;
       }
       return -1;
     }
 
+    /// <summary>
+    /// A static method to make it simple to calculate the total score given to a player based on
+    /// a supplied array.
+    /// </summary>
+    /// <param name="values">
+    /// An array of integers that represents the rolled dice.
+    /// </param>
+    /// <returns>
+    /// An integer representing the player's score.
+    /// </returns>
     public static int GetScoreFromValues(int[] values) {
       int[] occured = ThreeOrMore.Occurances(ThreeOrMore.GetFrequencies(values));
       int total = ThreeOrMore.CalculateScore(occured);
       return total;
     }
 
+    /// <summary>
+    /// A static method to find the frequency of values based on a supplied array.
+    /// </summary>
+    /// <param name="values">
+    /// An array of integers representing the dice that have been rolled.
+    /// </param>
+    /// <returns>
+    /// Returns a dictionary of a dice number to the frequency that the number occurs.
+    /// </returns>
     public static Dictionary<int, int> GetFrequencies(int[] values) {
       Dictionary<int, int> occured = new Dictionary<int, int>();
 
@@ -128,21 +156,41 @@ namespace CMP1903_A2_2324 {
       return occured;
     }
 
+    /// <summary>
+    /// A static method to get the frequencies that have occured.
+    /// </summary>
+    /// <param name="valueFreqs">
+    /// A dictionary of a dice number to the frequency that the number occurs to get the
+    /// frequencies from.
+    /// </param>
+    /// <returns>
+    /// An array of integers representing the occured frequencies.
+    /// </returns>
     public static int[] Occurances(Dictionary<int, int> valueFreqs) {
       return valueFreqs
-        .Select<KeyValuePair<int, int>, int>(kv => kv.Value)
-        .ToArray();
+        .Select<KeyValuePair<int, int>, int>(kv => kv.Value) // Get the frequency from the
+        .ToArray();                                          // dictionary.
     }
 
+    /// <summary>
+    /// A static method to convert dice frequencies to a score.
+    /// </summary>
+    /// <param name="diceFreq">
+    /// A dictionary of a dice number to the frequency that the number occurs to get the
+    /// frequencies from.
+    /// </param>
+    /// <returns>
+    /// An integer representing the score calculated for the player.
+    /// </returns>
     public static int CalculateScore(int[] diceFreq) {
-      if (diceFreq.Contains(5)) {
+      if (diceFreq.Contains(5)) { // 5 of same dice = scores 12.
         return 12;
       } else if (diceFreq.Contains(4)) {
-        return 6;
+        return 6; // 4 of the same dice = scores 6.
       } else if (diceFreq.Contains(3)) {
-        return 3;
+        return 3; // 3 of the same dice = 3.
       }
-      return 0;
+      return 0; // Anything other that dice with frequencies of 5 to 3 scores 0.
     }
   }
 }
