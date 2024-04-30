@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace CMP1903_A2_2324 {
     /// the different bits don't have any other issues.
     /// </value>
     public const int TEST_COUNT = 10_000;
+
+    // TODO: Add file writing.
 
     /// <summary>
     /// A static method used to run all the tests from one method.
@@ -41,10 +44,12 @@ namespace CMP1903_A2_2324 {
       int third = ThreeOrMore.TwoOfAKind(new int[] { 1, 3, 3, 1, 3, 4 });
       int fourth = ThreeOrMore.TwoOfAKind(new int[] { 1, 2, 3, 4 });
 
-      Debug.Assert(first == 1, "Failed to find double.");
-      Debug.Assert(second == 4, "Failed to find double.");
-      Debug.Assert(third == 1, "Failed to find double.");
-      Debug.Assert(fourth == -1, "Failed to find double.");
+      using (StreamWriter file = Testing.CreateFile("twoofakind")) {
+        Testing.DebugWriter(first == 1, "Find array number pair.", file);
+        Testing.DebugWriter(second == 4, "Find array number pair.", file);
+        Testing.DebugWriter(third == 1, "Find array number pair.", file);
+        Testing.DebugWriter(fourth == -1, "Find array number pair.", file);
+      }
     }
 
     /// <summary>
@@ -171,6 +176,19 @@ namespace CMP1903_A2_2324 {
       Game.DEBUG = false;
     }
 
+    public static void DebugWriter(bool check, string msg, StreamWriter file) {
+      Debug.Assert(check, msg);
+      string prefix = check ? "PASS" : "ERR";
+      file.Write($"{Testing.GetTimestamp()} [{prefix}] {msg}\n");
+    }
+
+    public static StreamWriter CreateFile(string name) {
+      return File.AppendText($"./{name}_{Testing.GetTimestamp()}.log");
+    }
+
+    public static long GetTimestamp() {
+      return DateTimeOffset.Now.ToUnixTimeSeconds();
+    }
 
   }
 
