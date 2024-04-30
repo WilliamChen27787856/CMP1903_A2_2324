@@ -29,10 +29,8 @@ namespace CMP1903_A2_2324 {
       TestOccurances(); // Test converting frequencies dictionary to just frequencies.
       TestTwoOfAKind(); // Test finding two of a kind from an integer array.
       TestThreeOrMoreScore(); // Test score calculation.
-      for (int i = 0; i < TEST_COUNT; i++) {
-        TestSevensOut(); // Test full SevensOut game.
-        TestThreeOrMore(); // Test full ThreeOrMore game.
-      }
+      TestSevensOut(); // Test full SevensOut game.
+      TestThreeOrMore(); // Test full ThreeOrMore game.
     }
 
     /// <summary>
@@ -60,12 +58,14 @@ namespace CMP1903_A2_2324 {
         new int[] { 1, 4, 1, 2, 2, 1, 3, 5, 6 }
       );
 
-      Debug.Assert(freqs[1] == 3, "Invalid frequency check.");
-      Debug.Assert(freqs[2] == 2, "Invalid frequency check.");
-      Debug.Assert(freqs[3] == 1, "Invalid frequency check.");
-      Debug.Assert(freqs[4] == 1, "Invalid frequency check.");
-      Debug.Assert(freqs[5] == 1, "Invalid frequency check.");
-      Debug.Assert(freqs[6] == 1, "Invalid frequency check.");
+      using (StreamWriter file = Testing.CreateFile("frequencies")) {
+        Testing.DebugWriter(freqs[1] == 3, "Invalid frequency check.", file);
+        Testing.DebugWriter(freqs[2] == 2, "Invalid frequency check.", file);
+        Testing.DebugWriter(freqs[3] == 1, "Invalid frequency check.", file);
+        Testing.DebugWriter(freqs[4] == 1, "Invalid frequency check.", file);
+        Testing.DebugWriter(freqs[5] == 1, "Invalid frequency check.", file);
+        Testing.DebugWriter(freqs[6] == 1, "Invalid frequency check.", file);
+      }
     }
 
     /// <summary>
@@ -75,10 +75,12 @@ namespace CMP1903_A2_2324 {
       int[] occurances = ThreeOrMore.Occurances(new Dictionary<int, int>() {
         [1] = 3, [2] = 8, [3] = 5, [4] = 6
       });
-      Debug.Assert(occurances[0] == 3, "First occurance checked.");
-      Debug.Assert(occurances[1] == 8, "Second occurance checked.");
-      Debug.Assert(occurances[2] == 5, "Third occurance checked.");
-      Debug.Assert(occurances[3] == 6, "Fourth occurance checked.");
+      using (StreamWriter file = Testing.CreateFile("occurances")) {
+        Testing.DebugWriter(occurances[0] == 3, "First occurance checked.", file);
+        Testing.DebugWriter(occurances[1] == 8, "Second occurance checked.", file);
+        Testing.DebugWriter(occurances[2] == 5, "Third occurance checked.", file);
+        Testing.DebugWriter(occurances[3] == 6, "Fourth occurance checked.", file);
+      }
     }
 
     /// <summary>
@@ -92,20 +94,23 @@ namespace CMP1903_A2_2324 {
       lockedDie.Locked = true;
 
       HashSet<int> numsOccured = new HashSet<int>();
-      for (int i = 0; i < TEST_COUNT; i++) {
-        int roll = die.Roll();
-        numsOccured.Add(roll);
 
-        // Die value needs to be within set range.
-        Debug.Assert(roll > 0 && roll <= die.NumberOfSides, "Die not in corret range.");
+      using (StreamWriter file = Testing.CreateFile("die")) {
+        for (int i = 0; i < TEST_COUNT; i++) {
+          int roll = die.Roll();
+          numsOccured.Add(roll);
 
-        // Needs to always return same value.
-        Debug.Assert(lockedDie.Roll() == previousNumber, "Die not locking.");
+          // Die value needs to be within set range.
+          Testing.DebugWriter(roll > 0 && roll <= die.NumberOfSides, "Die not in corret range.", file);
+
+          // Needs to always return same value.
+          Testing.DebugWriter(lockedDie.Roll() == previousNumber, "Die not locking.", file);
+        }
+
+        // Sets cannot have duplicates, so number of sides on the dice must equal number of items
+        // inside of the set.
+        Testing.DebugWriter(numsOccured.Count == die.NumberOfSides, "Too many dice values.", file);
       }
-
-      // Sets cannot have duplicates, so number of sides on the dice must equal number of items
-      // inside of the set.
-      Debug.Assert(numsOccured.Count == die.NumberOfSides, "Too many dice values.");
     }
 
     /// <summary>
@@ -117,10 +122,12 @@ namespace CMP1903_A2_2324 {
       int scoreThree = ThreeOrMore.CalculateScore(new int[] { 2, 3, 1 });
       int scoreZero = ThreeOrMore.CalculateScore(new int[] { 1, 1, 1 });
 
-      Debug.Assert(scoreTwelve == 12, "Score should be 12.");
-      Debug.Assert(scoreSix == 6, "Score should be 6.");
-      Debug.Assert(scoreThree == 3, "Score should be 3.");
-      Debug.Assert(scoreZero == 0, "Score should be 0.");
+      using (StreamWriter file = Testing.CreateFile("threeormorescores")) {
+        Testing.DebugWriter(scoreTwelve == 12, "Score should be 12.", file);
+        Testing.DebugWriter(scoreSix == 6, "Score should be 6.", file);
+        Testing.DebugWriter(scoreThree == 3, "Score should be 3.", file);
+        Testing.DebugWriter(scoreZero == 0, "Score should be 0.", file);
+      }
     }
 
     /// <summary>
@@ -128,19 +135,25 @@ namespace CMP1903_A2_2324 {
     /// </summary>
     public static void TestSevensOut() {
       Game.DEBUG = true;
-      Game game = new SevensOut(true);
-      game.Play(); // Auto-play Game.
 
-      int playerOne = game.PlayerOneScore;
-      int playerTwo = game.PlayerTwoScore;
-      int[] diceValues = game.DieValues;
-      int sum = game.DieSum;
+      using (StreamWriter file = Testing.CreateFile("sevensout")) {
+        for (int i = 0; i < TEST_COUNT; i++) {
+          Game game = new SevensOut(true);
+          game.Play(); // Auto-play Game.
 
-      // Check if successfully stops before 7.
-      Debug.Assert(diceValues.Sum() == 7, "Game ended with non-zero sum.");
+          int playerOne = game.PlayerOneScore;
+          int playerTwo = game.PlayerTwoScore;
+          int[] diceValues = game.DieValues;
+          int sum = game.DieSum;
 
-      // Ensure total die values are different to the sum property, this should never occur.
-      Debug.Assert(diceValues.Sum() == sum, "Game sum invalidated.");
+          // Check if successfully stops before 7.
+          Testing.DebugWriter(diceValues.Sum() == 7, "Game ended with non-zero sum.", file);
+
+          // Ensure total die values are different to the sum property, this should never occur.
+          Testing.DebugWriter(diceValues.Sum() == sum, "Game sum invalidated.", file);
+        }
+      }
+
       Game.DEBUG = false;
     }
 
@@ -150,28 +163,31 @@ namespace CMP1903_A2_2324 {
     public static void TestThreeOrMore() {
       Game.DEBUG = true;
       Game.DEBUG_INPUT = "1"; // Responds to re-roll questions with to re-roll remaining die.
-      Game game = new ThreeOrMore(true);
-      int[] scores = { 0, 0 };
-      while (game.NextMove()) {
-        // Assign scores inversed, since after game played it switches player before return.
-        scores[(game.PlayerOneMove ? 1 : 0)] += ThreeOrMore.GetScoreFromValues(game.DieValues);
+
+      using (StreamWriter file = Testing.CreateFile("threeormore")) {
+        for (int i = 0; i < TEST_COUNT; i++) {
+          Game game = new ThreeOrMore(true);
+          int[] scores = { 0, 0 };
+          while (game.NextMove()) {
+            // Assign scores inversed, since after game played it switches player before return.
+            scores[(game.PlayerOneMove ? 1 : 0)] += ThreeOrMore.GetScoreFromValues(game.DieValues);
+          }
+
+          // Early return so does not switch player, can use normal indices.
+          scores[(game.PlayerOneMove ? 0 : 1)] += ThreeOrMore.GetScoreFromValues(game.DieValues);
+
+          int playerOne = game.PlayerOneScore;
+          int playerTwo = game.PlayerTwoScore;
+          int highestScore = Math.Max(playerOne, playerTwo);
+
+          // Total >= 20 recognised.
+          Testing.DebugWriter(highestScore >= 20, "Highest score below 20, invalid game occured.", file);
+
+          // Scores added correctly.
+          Testing.DebugWriter(scores[0] == playerOne, "Player one score not matching final score.", file);
+          Testing.DebugWriter(scores[1] == playerTwo, "Player one score not matching final score.", file);
+        }
       }
-
-      // Early return so does not switch player, can use normal indices.
-      scores[(game.PlayerOneMove ? 0 : 1)] += ThreeOrMore.GetScoreFromValues(game.DieValues);
-
-      int playerOne = game.PlayerOneScore;
-      int playerTwo = game.PlayerTwoScore;
-      int highestScore = Math.Max(playerOne, playerTwo);
-
-      // Total >= 20 recognised.
-      Debug.Assert(highestScore >= 20, "Highest score below 20, invalid game occured.");
-
-      // Scores added correctly.
-      Debug.Assert(scores[0] == playerOne, "Player one score not matching final score.");
-      Debug.Assert(scores[1] == playerTwo, "Player one score not matching final score.");
-
-
       Game.DEBUG_INPUT = "";
       Game.DEBUG = false;
     }
