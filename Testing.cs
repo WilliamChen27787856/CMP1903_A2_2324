@@ -18,8 +18,6 @@ namespace CMP1903_A2_2324 {
     /// </value>
     public const int TEST_COUNT = 10_000;
 
-    // TODO: Add file writing.
-
     /// <summary>
     /// A static method used to run all the tests from one method.
     /// </summary>
@@ -101,15 +99,15 @@ namespace CMP1903_A2_2324 {
           numsOccured.Add(roll);
 
           // Die value needs to be within set range.
-          Testing.DebugWriter(roll > 0 && roll <= die.NumberOfSides, "Die not in corret range.", file);
+          Testing.DebugWriter(roll > 0 && roll <= die.NumberOfSides, "Die roll value range check.", file);
 
           // Needs to always return same value.
-          Testing.DebugWriter(lockedDie.Roll() == previousNumber, "Die not locking.", file);
+          Testing.DebugWriter(lockedDie.Roll() == previousNumber, "Locked die check.", file);
         }
 
         // Sets cannot have duplicates, so number of sides on the dice must equal number of items
         // inside of the set.
-        Testing.DebugWriter(numsOccured.Count == die.NumberOfSides, "Too many dice values.", file);
+        Testing.DebugWriter(numsOccured.Count == die.NumberOfSides, "Dice roll value occurance check..", file);
       }
     }
 
@@ -123,10 +121,10 @@ namespace CMP1903_A2_2324 {
       int scoreZero = ThreeOrMore.CalculateScore(new int[] { 1, 1, 1 });
 
       using (StreamWriter file = Testing.CreateFile("threeormorescores")) {
-        Testing.DebugWriter(scoreTwelve == 12, "Score should be 12.", file);
-        Testing.DebugWriter(scoreSix == 6, "Score should be 6.", file);
-        Testing.DebugWriter(scoreThree == 3, "Score should be 3.", file);
-        Testing.DebugWriter(scoreZero == 0, "Score should be 0.", file);
+        Testing.DebugWriter(scoreTwelve == 12, "Score calculation correct.", file);
+        Testing.DebugWriter(scoreSix == 6, "Score calculation correct.", file);
+        Testing.DebugWriter(scoreThree == 3, "Score calculation correct.", file);
+        Testing.DebugWriter(scoreZero == 0, "Score calculation correct.", file);
       }
     }
 
@@ -147,10 +145,10 @@ namespace CMP1903_A2_2324 {
           int sum = game.DieSum;
 
           // Check if successfully stops before 7.
-          Testing.DebugWriter(diceValues.Sum() == 7, "Game ended with non-zero sum.", file);
+          Testing.DebugWriter(diceValues.Sum() == 7, "Correct game ending condition.", file);
 
           // Ensure total die values are different to the sum property, this should never occur.
-          Testing.DebugWriter(diceValues.Sum() == sum, "Game sum invalidated.", file);
+          Testing.DebugWriter(diceValues.Sum() == sum, "Game sum check.", file);
         }
       }
 
@@ -181,11 +179,11 @@ namespace CMP1903_A2_2324 {
           int highestScore = Math.Max(playerOne, playerTwo);
 
           // Total >= 20 recognised.
-          Testing.DebugWriter(highestScore >= 20, "Highest score below 20, invalid game occured.", file);
+          Testing.DebugWriter(highestScore >= 20, "Highest end score check.", file);
 
           // Scores added correctly.
-          Testing.DebugWriter(scores[0] == playerOne, "Player one score not matching final score.", file);
-          Testing.DebugWriter(scores[1] == playerTwo, "Player one score not matching final score.", file);
+          Testing.DebugWriter(scores[0] == playerOne, "Player one matching final score.", file);
+          Testing.DebugWriter(scores[1] == playerTwo, "Player two matching final score.", file);
         }
       }
       Game.DEBUG_INPUT = "";
