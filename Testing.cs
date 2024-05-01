@@ -166,7 +166,7 @@ namespace CMP1903_A2_2324 {
         for (int i = 0; i < TEST_COUNT; i++) {
           Game game = new ThreeOrMore(true);
           int[] scores = { 0, 0 };
-          while (game.NextMove()) {
+          while (game.NextTurn()) {
             // Assign scores inversed, since after game played it switches player before return.
             scores[(game.PlayerOneMove ? 1 : 0)] += ThreeOrMore.GetScoreFromValues(game.DieValues);
           }

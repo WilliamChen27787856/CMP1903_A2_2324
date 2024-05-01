@@ -13,7 +13,7 @@ namespace CMP1903_A2_2324 {
   /// This class has to be the main class/contain the program entry-point to abide by the brief
   /// only allowing 6 classes in the program.
   /// </remarks>
-  public abstract class Game {
+  public abstract class Game : IPlayable {
 
     /// <summary>
     /// This is the program entry point.
@@ -164,14 +164,7 @@ namespace CMP1903_A2_2324 {
 
     }
 
-    /// <summary>
-    /// An abstract class that requires implementation, it is used to play each move in the game.
-    /// </summary>
-    /// <returns>
-    /// A boolean value representing if the game is over or not
-    /// (true = continue, false = game over).
-    /// </returns>
-    public abstract bool NextMove();
+    public abstract bool NextTurn();
 
     /// <summary>
     /// The standard implementation of the Play method continually calls the NextMove method until
@@ -182,13 +175,13 @@ namespace CMP1903_A2_2324 {
     /// This method is not overwritten by any of the current games however to allow extensibility
     /// this method is virtual.
     /// </remarks>
-    public virtual void Play() {
+    public void Play() {
       do {
         Game.ScreenPrint("=====================");
         if (!this.IsPlayerComputer()) {
           Game.Pause($"{this.GetPlayerName()}'s turn, press enter to roll the dice: ");
         }
-      } while (this.NextMove());
+      } while (this.NextTurn());
       Game.ScreenPrint("=====================");
     }
 

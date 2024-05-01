@@ -32,7 +32,7 @@ namespace CMP1903_A2_2324 {
     /// <returns>
     /// A boolean for if the game should continue or not, true = continue, false = exit.
     /// </returns>
-    public override bool NextMove() {
+    public override bool NextTurn() {
       int[] diceRolled = this.RollDice();
       this.PrintRolledDice(); // Print out what the player rolled.
 
