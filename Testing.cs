@@ -41,10 +41,10 @@ namespace CMP1903_A2_2324 {
       int fourth = ThreeOrMore.TwoOfAKind(new int[] { 1, 2, 3, 4 });
 
       using (StreamWriter file = Testing.CreateFile("twoofakind")) {
-        Testing.DebugWriter(first == 1, "Find array number pair.", file);
-        Testing.DebugWriter(second == 4, "Find array number pair.", file);
-        Testing.DebugWriter(third == 1, "Find array number pair.", file);
-        Testing.DebugWriter(fourth == -1, "Find array number pair.", file);
+        Testing.DebugWriter(first == 1, $"Find array number pair. {first} == 1", file);
+        Testing.DebugWriter(second == 4, $"Find array number pair. {second} == 4", file);
+        Testing.DebugWriter(third == 1, $"Find array number pair. {third} == 1", file);
+        Testing.DebugWriter(fourth == -1, $"Find array number pair. {fourth} == -1", file);
       }
     }
 
@@ -57,12 +57,12 @@ namespace CMP1903_A2_2324 {
       );
 
       using (StreamWriter file = Testing.CreateFile("frequencies")) {
-        Testing.DebugWriter(freqs[1] == 3, "Invalid frequency check.", file);
-        Testing.DebugWriter(freqs[2] == 2, "Invalid frequency check.", file);
-        Testing.DebugWriter(freqs[3] == 1, "Invalid frequency check.", file);
-        Testing.DebugWriter(freqs[4] == 1, "Invalid frequency check.", file);
-        Testing.DebugWriter(freqs[5] == 1, "Invalid frequency check.", file);
-        Testing.DebugWriter(freqs[6] == 1, "Invalid frequency check.", file);
+        Testing.DebugWriter(freqs[1] == 3, $"Invalid frequency check. {freq[1]} == 3", file);
+        Testing.DebugWriter(freqs[2] == 2, $"Invalid frequency check. {freq[2]} == 2", file);
+        Testing.DebugWriter(freqs[3] == 1, $"Invalid frequency check. {freq[3]} == 1", file);
+        Testing.DebugWriter(freqs[4] == 1, $"Invalid frequency check. {freq[4]} == 1", file);
+        Testing.DebugWriter(freqs[5] == 1, $"Invalid frequency check. {freq[5]} == 1", file);
+        Testing.DebugWriter(freqs[6] == 1, $"Invalid frequency check. {freq[6]} == 1", file);
       }
     }
 
@@ -74,10 +74,26 @@ namespace CMP1903_A2_2324 {
         [1] = 3, [2] = 8, [3] = 5, [4] = 6
       });
       using (StreamWriter file = Testing.CreateFile("occurances")) {
-        Testing.DebugWriter(occurances[0] == 3, "First occurance checked.", file);
-        Testing.DebugWriter(occurances[1] == 8, "Second occurance checked.", file);
-        Testing.DebugWriter(occurances[2] == 5, "Third occurance checked.", file);
-        Testing.DebugWriter(occurances[3] == 6, "Fourth occurance checked.", file);
+        Testing.DebugWriter(
+          occurances[0] == 3,
+          $"First occurance checked. {occurances[0]} == 3",
+          file
+        );
+        Testing.DebugWriter(
+          occurances[1] == 8,
+          $"Second occurance checked. {occurances[1]} == 8",
+          file
+        );
+        Testing.DebugWriter(
+          occurances[2] == 5,
+          $"Third occurance checked. {occurances[2]} == 5",
+          file
+        );
+        Testing.DebugWriter(
+          occurances[3] == 6,
+          $"Fourth occurance checked. {occurances[3]} == 6",
+          file
+        );
       }
     }
 
@@ -99,15 +115,28 @@ namespace CMP1903_A2_2324 {
           numsOccured.Add(roll);
 
           // Die value needs to be within set range.
-          Testing.DebugWriter(roll > 0 && roll <= die.NumberOfSides, "Die roll value range check.", file);
+          Testing.DebugWriter(
+            roll > 0 && roll <= die.NumberOfSides,
+            $"Die roll value range check. 0 < {roll} < {die.NumberOfSides}",
+            file
+          );
 
           // Needs to always return same value.
-          Testing.DebugWriter(lockedDie.Roll() == previousNumber, "Locked die check.", file);
+          int lockRoll = lockedDie.Roll();
+          Testing.DebugWriter(
+            lockRoll == previousNumber,
+            $"Locked die check. {lockRoll} == {previousNumber}",
+            file
+          );
         }
 
         // Sets cannot have duplicates, so number of sides on the dice must equal number of items
         // inside of the set.
-        Testing.DebugWriter(numsOccured.Count == die.NumberOfSides, "Dice roll value occurance check..", file);
+        Testing.DebugWriter(
+          numsOccured.Count == die.NumberOfSides,
+          $"Dice roll value occurance check. {numsOccured.Count} == {die.NumberOfSides}",
+          file
+        );
       }
     }
 
@@ -121,10 +150,26 @@ namespace CMP1903_A2_2324 {
       int scoreZero = ThreeOrMore.CalculateScore(new int[] { 1, 1, 1 });
 
       using (StreamWriter file = Testing.CreateFile("threeormorescores")) {
-        Testing.DebugWriter(scoreTwelve == 12, "Score calculation correct.", file);
-        Testing.DebugWriter(scoreSix == 6, "Score calculation correct.", file);
-        Testing.DebugWriter(scoreThree == 3, "Score calculation correct.", file);
-        Testing.DebugWriter(scoreZero == 0, "Score calculation correct.", file);
+        Testing.DebugWriter(
+          scoreTwelve == 12,
+          $"Score calculation correct. {scoreTwelve} == 12",
+          file
+        );
+        Testing.DebugWriter(
+          scoreSix == 6,
+          $"Score calculation correct. {scoreSix} == 6",
+          file
+        );
+        Testing.DebugWriter(
+          scoreThree == 3,
+          $"Score calculation correct. {scoreThree} == 3",
+          file
+        );
+        Testing.DebugWriter(
+          scoreZero == 0,
+          $"Score calculation correct. {scoreZero} == 0",
+          file
+        );
       }
     }
 
@@ -145,10 +190,15 @@ namespace CMP1903_A2_2324 {
           int sum = game.DieSum;
 
           // Check if successfully stops before 7.
-          Testing.DebugWriter(diceValues.Sum() == 7, "Correct game ending condition.", file);
+          int diceSum = diceValues.Sum();
+          Testing.DebugWriter(
+            diceSum == 7,
+            $"Correct game ending condition. {diceSum} == 7",
+            file
+          );
 
           // Ensure total die values are different to the sum property, this should never occur.
-          Testing.DebugWriter(diceValues.Sum() == sum, "Game sum check.", file);
+          Testing.DebugWriter(diceSum == sum, $"Game sum check. {diceSum} == {sum}", file);
         }
       }
 
@@ -179,11 +229,23 @@ namespace CMP1903_A2_2324 {
           int highestScore = Math.Max(playerOne, playerTwo);
 
           // Total >= 20 recognised.
-          Testing.DebugWriter(highestScore >= 20, "Highest end score check.", file);
+          Testing.DebugWriter(
+            highestScore >= 20,
+            $"Highest end score check. {highestScore} >= 20",
+            file
+          );
 
           // Scores added correctly.
-          Testing.DebugWriter(scores[0] == playerOne, "Player one matching final score.", file);
-          Testing.DebugWriter(scores[1] == playerTwo, "Player two matching final score.", file);
+          Testing.DebugWriter(
+            scores[0] == playerOne,
+            $"Player one matching final score. {scores[0]} == {playerOne}",
+            file
+          );
+          Testing.DebugWriter(
+            scores[1] == playerTwo,
+            $"Player two matching final score. {scores[1]} == {playerTwo}",
+            file
+          );
         }
       }
       Game.DEBUG_INPUT = "";
