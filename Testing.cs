@@ -57,12 +57,12 @@ namespace CMP1903_A2_2324 {
       );
 
       using (StreamWriter file = Testing.CreateFile("frequencies")) {
-        Testing.DebugWriter(freqs[1] == 3, $"Invalid frequency check. {freq[1]} == 3", file);
-        Testing.DebugWriter(freqs[2] == 2, $"Invalid frequency check. {freq[2]} == 2", file);
-        Testing.DebugWriter(freqs[3] == 1, $"Invalid frequency check. {freq[3]} == 1", file);
-        Testing.DebugWriter(freqs[4] == 1, $"Invalid frequency check. {freq[4]} == 1", file);
-        Testing.DebugWriter(freqs[5] == 1, $"Invalid frequency check. {freq[5]} == 1", file);
-        Testing.DebugWriter(freqs[6] == 1, $"Invalid frequency check. {freq[6]} == 1", file);
+        Testing.DebugWriter(freqs[1] == 3, $"Invalid frequency check. {freqs[1]} == 3", file);
+        Testing.DebugWriter(freqs[2] == 2, $"Invalid frequency check. {freqs[2]} == 2", file);
+        Testing.DebugWriter(freqs[3] == 1, $"Invalid frequency check. {freqs[3]} == 1", file);
+        Testing.DebugWriter(freqs[4] == 1, $"Invalid frequency check. {freqs[4]} == 1", file);
+        Testing.DebugWriter(freqs[5] == 1, $"Invalid frequency check. {freqs[5]} == 1", file);
+        Testing.DebugWriter(freqs[6] == 1, $"Invalid frequency check. {freqs[6]} == 1", file);
       }
     }
 

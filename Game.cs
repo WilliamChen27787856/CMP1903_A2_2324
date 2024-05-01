@@ -78,7 +78,9 @@ namespace CMP1903_A2_2324 {
       }
 
       if (option == "Play Game") {
-        Game game = Game.PickGame(true);
+        Game.ScreenPrint("Would you like to play against the computer?");
+        string againstComputer = Choice<string>(new string[] { "Yes", "No" });
+        Game game = Game.PickGame(againstComputer == "Yes");
         Game.RunGame(game);
       } else {
         Console.WriteLine(Statistics.INSTANCE.ToString());
