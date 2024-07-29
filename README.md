@@ -1,9 +1,3 @@
-# CMP1903_A2_2324
-
-## Game Rules
-
-Dice Games
-
 Sevens Out
 2 x dice
 Rules:
@@ -12,17 +6,31 @@ Rules:
 	If it is any other number - add it to your total.
 	If it is a double - add double the total to your score (3,3 would add 12 to your total)
 
+Eg:
+Roll 1: [5,3] (Total=8)
+Roll 2: [1,K] (Total=8+11=19)
+Roll 3: [5,5] (Total=19+20=39)
+Roll 4: [6,1] (End total = 39)
+
+
 Three or More
 5 x dice
 Rules:
 	Roll all 5 dice hoping for a 3-of-a-kind or better.
-	If 2-of-a-kind is rolled, player may choose to rethrow all, or the remaining dice.
+	If (2/3/4)-of-a-kind is rolled, player may choose to rethrow all, or the remaining dice.
+	There may only be two dice rolls in total.
 	3-of-a-kind: 3 points
 	4-of-a-kind: 6 points
 	5-of-a-kind: 12 points
 	First to a total of 20.
 
+Eg:
+[Q,K,7,7,2]
+(Keep 7's, roll remaining three)
+[7,9,Q]
+(Three 7's = 3 points)
 
-Player can choose either game to play through a menu.
-Play with partner (on the same computer), or against the computer.
-Should be a console implementation - but scope for extending it to a GUI application should be possible.
+[3,6,3,A,3]
+(Roll all dice again)
+[A,K,7,5,9]
+(0 points)
